@@ -1,5 +1,5 @@
 import urllib.parse
-from sp_api.base import Client, Marketplaces, sp_endpoint, ApiResponse
+from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
 
 class Products(Client):
@@ -61,6 +61,62 @@ class Products(Client):
             kwargs['ItemCondition'] = item_condition
 
         return self._create_get_pricing_request(asin_list, 'Asin', **kwargs)
+
+    @sp_endpoint('/products/pricing/v0/listings/{}/offers', method='GET')
+    def get_offers_listing(self, seller_sku: [str], item_condition=None, **kwargs) -> ApiResponse:
+        """
+        get_product_pricing_for_asins(self, asin_list: [str], item_condition=None, **kwargs) -> ApiResponse
+        Returns pricing information for a seller's offer listings based on ASIN.
+
+        **Usage Plan:**
+
+        ======================================  ==============
+        Rate (requests per second)               Burst
+        ======================================  ==============
+        1                                       1
+        ======================================  ==============
+
+
+        :param asin_list: [str]
+        :param item_condition: str ("New", "Used", "Collectible", "Refurbished", "Club")
+           Filters the offer listings based on item condition. Possible values: New, Used, Collectible, Refurbished, Club.
+           Available values : New, Used, Collectible, Refurbished, Club
+        :param kwargs:
+        :return: ApiResponse
+        """
+        if item_condition is not None:
+            kwargs['ItemCondition'] = item_condition
+
+        return self._request(fill_query_params(kwargs.pop('path'), seller_sku), params=kwargs)
+
+    @sp_endpoint('/products/pricing/v0/listings/{}/offers', method='GET')
+    def get_offers_listing(self, seller_sku: [str], item_condition=None, **kwargs) -> ApiResponse:
+        """
+        get_product_pricing_for_asins(self, asin_list: [str], item_condition=None, **kwargs) -> ApiResponse
+        Returns pricing information for a seller's offer listings based on ASIN.
+
+        **Usage Plan:**
+
+        ======================================  ==============
+        Rate (requests per second)               Burst
+        ======================================  ==============
+        1                                       1
+        ======================================  ==============
+
+
+        :param asin_list: [str]
+        :param item_condition: str ("New", "Used", "Collectible", "Refurbished", "Club")
+           Filters the offer listings based on item condition. Possible values: New, Used, Collectible, Refurbished, Club.
+           Available values : New, Used, Collectible, Refurbished, Club
+        :param kwargs:
+        :return: ApiResponse
+        """
+        if item_condition is not None:
+            kwargs['ItemCondition'] = item_condition
+
+        return self._request(fill_query_params(kwargs.pop('path'), seller_sku), params=kwargs)
+
+
 
     @sp_endpoint('/products/pricing/v0/competitivePrice', method='GET')
     def get_competitive_pricing_for_skus(self, seller_sku_list: [str], **kwargs) -> ApiResponse:
